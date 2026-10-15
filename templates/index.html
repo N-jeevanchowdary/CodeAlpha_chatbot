@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeAlpha AI Assistant Chatbot</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .chat-container {
+            width: 420px;
+            height: 600px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .chat-header {
+            background: #2563eb;
+            color: #ffffff;
+            padding: 18px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .chat-box {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .message {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        .bot-message {
+            background: #e2e8f0;
+            color: #1e293b;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+        .user-message {
+            background: #2563eb;
+            color: #ffffff;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+        .chat-input-area {
+            display: flex;
+            padding: 12px;
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+        }
+        .chat-input-area input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 20px;
+            outline: none;
+            font-size: 0.95rem;
+        }
+        .chat-input-area button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            margin-left: 8px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .chat-input-area button:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="chat-header">
+        🤖 CodeAlpha Cloud Assistant
+    </div>
+    <div class="chat-box" id="chatBox">
+        <div class="message bot-message">
+            Hello! I am your CodeAlpha Assistant. Ask me anything about Cloud Computing, AWS, or Azure!
+        </div>
+    </div>
+    <div class="chat-input-area">
+        <input type="text" id="userInput" placeholder="Type your message..." onkeypress="handleKeyPress(event)">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+    async function sendMessage() {
+        const inputField = document.getElementById("userInput");
+        const messageText = inputField.value.trim();
+        if (!messageText) return;
+
+        appendMessage(messageText, "user-message");
+        inputField.value = "";
+
+        try {
+            const response = await fetch("/get_response", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: messageText })
+            });
+            const data = await response.json();
+            appendMessage(data.response, "bot-message");
+        } catch (error) {
+            appendMessage("Error communicating with server.", "bot-message");
+        }
+    }
+
+    function appendMessage(text, className) {
+        const chatBox = document.getElementById("chatBox");
+        const messageElement = document.createElement("div");
+        messageElement.className = `message ${className}`;
+        messageElement.innerText = text;
+        chatBox.appendChild(messageElement);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function handleKeyPress(event) {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
+    }
+</script>
+
+</body>
+</html>

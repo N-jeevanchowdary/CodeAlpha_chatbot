@@ -24,5 +24,16 @@ An interactive, responsive web-based AI Assistant Chatbot built using **Python F
 ## 💻 How to Run Locally
 
 1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/N-jeevanchowdary/CodeAlpha_chatbot.git](https://github.com/N-jeevanchowdary/CodeAlpha_chatbot.git)
+   `git clone https://github.com/N-jeevanchowdary/CodeAlpha_chatbot.git`
+
+2. **Navigate to the project folder:**
+   `cd CodeAlpha_chatbot`
+
+3. **Install Flask:**
+   `pip install flask`
+
+4. **Run the application:**
+   `py app.py`
+
+5. **Open in browser:** 
+   `http://127.0.0.1:5000`
